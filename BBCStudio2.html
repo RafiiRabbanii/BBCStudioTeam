@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Sports Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e3f2fd;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: rgba(21, 101, 192, 0.8); /* Transparent */
+            color: #fff;
+            padding: 10px;
+            width: 100vw;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #0d47a1;
+            transform: scale(1.05);
+        }
+
+        /* Header */
+        header {
+            width: 100vw;
+            height: 400px;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        header p {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        header img {
+            width: 100vw;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        header img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Section */
+        section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        /* Form Input */
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #1e88e5;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #1565c0;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #0d47a1;
+            transform: scale(1.05);
+        }
+
+        /* Blog Article */
+        article {
+            margin: 20px 0;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        article h3 {
+            margin-bottom: 10px;
+        }
+
+        /* Equipment Article */
+        .equipment {
+            margin: 20px 0;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1565c0;
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Calorie Card */
+        .calorie-card {
+            background-color: #e1f5fe;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calorie-card h4 {
+            margin: 0;
+        }
+
+        /* Fitness Tracker */
+        .tracker {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tracker input {
+            width: calc(50% - 20px);
+        }
+
+        .tracker button {
+            width: 100%;
+        }
+
+        /* Equipment Grid */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px; /* Space between items */
+            margin-top: 20px;
+        }
+
+        .equipment-item {
+            background-color: #e1f5fe; /* Background color */
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            position: relative; /* For tooltip positioning */
+            transition: transform 0.3s;
+            cursor: pointer; /* Pointer cursor for items */
+        }
+
+        .equipment-item:hover {
+            transform: scale(1.05); /* Zoom effect on hover */
+        }
+
+        .equipment-item img {
+            width: 100%; /* Image fills item width */
+            border-radius: 5px;
+        }
+
+        .tooltip {
+            display: none; /* Hide tooltip */
+            position: absolute;
+            bottom: 100%; /* Show above item */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333; /* Tooltip background color */
+            color: #fff; /* Tooltip text color */
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap; /* Keep text on one line */
+            z-index: 10; /* Keep tooltip on top */
+        }
+
+        .equipment-item:hover .tooltip,
+        .equipment-item:focus .tooltip {
+            display: block; /* Show tooltip on hover or focus */
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            header img {
+                max-height: 300px;
+            }
+
+            .tracker input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showSection('home')">Home</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('blog')">Running Blog</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('calculator')">Calorie Calculator</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('equipment')">Running Gear</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('tracker')">Fitness Tracker</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <img src="https://img.freepik.com/free-photo/portrait-young-woman-running-outdoor_23-2148381920.jpg?t=st=1728118271~exp=1728121871~hmac=de3180817e84ed0cc953dcf98bc4c0fb65a284731e613485ef7fae00251274e6&w=1380" alt="Sports Image">
+    </header>
+
+    <section id="home" class="active">
+        <h2>Welcome to the Running Sports Website</h2>
+        <p>This website aims to help you start a healthy lifestyle through running. You can read useful articles in our Running Blog or use the Calorie Calculator to estimate the calories burned while running.</p>
+    </section>
+
+    <section id="blog">
+        <h2>Running Blog</h2>
+        <article>
+            <h3>Benefits of Morning Running</h3>
+            <p>Running in the morning is highly beneficial for improving physical and mental health. Besides burning calories, running can also enhance your mood and boost your energy.</p>
+            <p>Various studies show that running in the morning can help increase your metabolism and make you more productive throughout the day.</p>
+        </article>
+        <article>
+            <h3>Proper Running Technique</h3>
+            <p>To maximize the benefits of running, it's essential to learn the correct running technique. Make sure your posture is upright, your feet land softly, and you manage your breathing well.</p>
+            <p>Practicing techniques such as running with short and quick steps can help improve your running efficiency.</p>
+        </article>
+        <article>
+            <h3>Staying Hydrated While Running</h3>
+            <p>Hydration is key to optimal running performance. Ensure you drink enough water before, during, and after your run.</p>
+            <p>Dehydration can lead to reduced energy and increase the risk of injury. Carry a water bottle when running long distances.</p>
+        </article>
+        <article>
+            <h3>Proper Warm-up and Cool-down</h3>
+            <p>Warming up before running helps prepare your muscles and reduce the risk of injury. Do a warm-up for 5-10 minutes before starting your run.</p>
+            <p>Cool-down after running is also crucial to normalize your heart rate and avoid muscle cramps. Stretching helps with recovery.</p>
+        </article>
+        <article>
+            <h3>Different Types of Running</h3>
+            <p>There are various types of running you can try, such as long-distance running, sprinting, and interval running. Each type has its benefits for your fitness and health.</p>
+            <p>Choosing variety in your running program can help prevent boredom and boost motivation.</p>
+        </article>
+    </section>
+
+    <section id="calculator">
+        <h2>Calorie Calculator</h2>
+        <div class="tracker">
+            <h4>Calculate Calories Burned</h4>
+            <input type="number" id="distance" placeholder="Distance (km)">
+            <input type="number" id="weight" placeholder="Weight (kg)">
+            <button onclick="calculateCalories()">Calculate Calories</button>
+            <h4>Calories Burned: <span id="caloriesBurned">0</span></h4>
+        </div>
+    </section>
+
+    <section id="equipment">
+        <h2>Running Gear</h2>
+        <p>Here are some recommended equipment for running:</p>
+        <div class="equipment-grid">
+            <div class="equipment-item" tabindex="0">
+                <img src="https://img.ncrsport.com/img/storage/large/SPE110400008-1.jpg/" alt="Running Shoes" />
+                <h4>Quality Running Shoes</h4>
+                <div class="tooltip">Shoes designed to provide comfort and support while running.</div>
+            </div>
+            <div class="equipment-item" tabindex="0">
+                <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRD_tF_oPa1kYzAOixu8-ZK9l08NNVCESDoNWCdgjDpqv2P8nEj8uM2oxibEL7nbJOjcl8n3Zt6YszS6JjiVrqo0G6fxETc1n40X--5hqJ_-1iN9YdtFvHd9w&usqp=CAE" alt="Running Socks" />
+                <h4>Special Running Socks</h4>
+                <div class="tooltip">Socks that help prevent blisters and provide extra support.</div>
+            </div>
+            <div class="equipment-item" tabindex="0">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV0nzKZsRE8bEQyK0JLqC0RmzWh35481xlhQ&s" alt="Fitness Tracker Watch" />
+                <h4>Fitness Tracker Watch</h4>
+                <div class="tooltip">Measures distance, time, and calories burned during your run.</div>
+            </div>
+            <div class="equipment-item" tabindex="0">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsn6PrqUzNnqX_oOSMvldiysn3ZY0ppdPHQ&s" alt="Water Bottle" />
+                <h4>Water Bottle for Hydration</h4>
+                <div class="tooltip">Helps you stay hydrated while running, easily portable.</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tracker">
+        <h2>Fitness Tracker</h2>
+        <p>Use a fitness tracker to monitor your running activities and track your fitness progress.</p>
+        <div class="tracker">
+            <h4>Enter Distance and Time</h4>
+            <input type="number" placeholder="Distance (km)">
+            <input type="text" placeholder="Time (minutes)">
+            <button>Log Activity</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Running Sports Website. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll("section");
+            sections.forEach(section => {
+                section.classList.remove("active");
+            });
+            // Show the selected section
+            const activeSection = document.getElementById(sectionId);
+            activeSection.classList.add("active");
+        }
+
+        function calculateCalories() {
+            const distance = parseFloat(document.getElementById("distance").value);
+            const weight = parseFloat(document.getElementById("weight").value);
+            const caloriesBurned = (distance * 0.621371) * (weight * 0.63);
+            document.getElementById("caloriesBurned").innerText = Math.round(caloriesBurned);
+        }
+
+        function resetCalories() {
+            document.getElementById("caloriesBurned").innerText = 0;
+        }
+    </script>
+</body>
+</html>
